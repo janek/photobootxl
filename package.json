@@ -1,6 +1,7 @@
 { 
     "scripts": {
         "start": "deno run --allow-net --allow-env --allow-read --allow-run bot.ts",
-        "install": "sudo cp photobootxl.service /etc/systemd/system; sudo systemctl daemon-reload; sudo systemctl enable photobootxl; sudo systemctl start photobootxl"
+        "install": "sudo cp photobootxl.service /etc/systemd/system; sudo systemctl daemon-reload; sudo systemctl enable photobootxl; sudo systemctl start photobootxl",
+        "journal": "journalctl -f"
     }
 }
