@@ -3,8 +3,8 @@ Description= Photobootxl Bot
 
 [Service] 
 Type= simple 
-ExecStart= /home/pi/.bun/bin/bun run /home/pi/Developer/photobooxl/bot.ts
-WorkingDirectory= /home/pi/Developer/photobooxl
+ExecStart= /home/pi/.bun/bin/bun run /home/pi/Developer/photobootxl/bot.ts
+WorkingDirectory= /home/pi/Developer/photobootxl
 Restart=on-failure
 RestartSec=5
 
