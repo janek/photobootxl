@@ -4,27 +4,29 @@ import { load } from "https://deno.land/std@0.221.0/dotenv/mod.ts";
 await load({ export: true }) 
 
 const token = Deno.env.get("BOT_TOKEN")!;
+const photoFilename = 'photo.jpg'
 const bot = new Bot(token); 
 
 bot.command("start", (ctx) => ctx.reply("Welcome! Up and running."));
 bot.command("photo", async (ctx) => {
   // Run a terminal command and await end: ffmpeg -f v4l2 -i /dev/video0 -frames 1 ~/Desktop/dx.jpg
 
-  // define command used to create the subprocess
-  const command = new Deno.Command(Deno.execPath(), {
-    args: ["eval", "console.log('hello'); console.error('world')"],
-  });
+  await takePhoto();
 
-  // create subprocess and collect output
-  const { code, stdout, stderr } = await command.output();
-
-  console.assert(code === 0);
-  console.assert("world\n" === new TextDecoder().decode(stderr));
-  console.log(new TextDecoder().decode(stdout));
-
-  const photo = InputMediaBuilder.photo(new InputFile("test_image.jpg"));
+  const photo = InputMediaBuilder.photo(new InputFile("photo.jpg"));
   ctx.replyWithMediaGroup([photo]);
 });
+
+const takePhoto = async () => {
+  const command = new Deno.Command("fswebcam", {
+    args: [photoFilename],
+  });
+  const { code } = await command.output();
+  if (code !== 0) {
+    throw new Error(`fswebcam exited with code ${code}`);
+  }
+};
+
 
 bot.on("message", (ctx) => ctx.reply("Got another message!"));
 
