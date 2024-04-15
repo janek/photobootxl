@@ -1,0 +1,12 @@
+[Unit] 
+Description= Photobootxl Bot
+
+[Service] 
+Type= simple 
+ExecStart= bun run /home/pi/Developer/photobooxl/bot.ts
+WorkingDirectory= /home/pi/Developer/photobooxl
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
