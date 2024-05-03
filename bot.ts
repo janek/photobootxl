@@ -16,10 +16,21 @@ bot.command("photo", async (ctx) => {
   // Run a terminal command and await end: ffmpeg -f v4l2 -i /dev/video0 -frames 1 ~/Desktop/dx.jpg
 
   await takePhoto();
+  await overlayTurbulenceOnPhoto();
 
   const photo = InputMediaBuilder.photo(new InputFile("photo.jpg"));
   ctx.replyWithMediaGroup([photo]);
 });
+
+const overlayTurbulenceOnPhoto = async () => {
+  const command = new Deno.Command("sh", {
+    args: ["overlay.sh"],
+  });
+  const { code } = await command.output();
+  if (code !== 0) {
+    throw new Error(`fswebcam exited with code ${code}`);
+  }
+};
 
 const takePhoto = async () => {
   const command = new Deno.Command("fswebcam", {
