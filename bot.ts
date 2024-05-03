@@ -35,4 +35,4 @@ bot.on("message", (ctx) => ctx.reply("Got another message!"));
 
 bot.start();
 
-bot.api.sendMessage(Deno.env.get("TELEGRAM_ADMIN_ID")!, "Bo(o)t(h) started!"
+bot.api.sendMessage(Deno.env.get("TELEGRAM_ADMIN_ID")!, "Bo(o)t(h) started!");
