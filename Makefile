@@ -1,2 +1,2 @@
 restart:
-    sudo systemctl restart photobootxl.service
+	@sudo systemctl restart photobootxl.service
