@@ -1,11 +1,15 @@
-import { Bot, InputFile, InputMediaBuilder } from "https://deno.land/x/grammy@v1.22.4/mod.ts";
+import {
+  Bot,
+  InputFile,
+  InputMediaBuilder,
+} from "https://deno.land/x/grammy@v1.22.4/mod.ts";
 import { load } from "https://deno.land/std@0.221.0/dotenv/mod.ts";
 
-await load({ export: true }) 
+await load({ export: true });
 
 const token = Deno.env.get("BOT_TOKEN")!;
-const photoFilename = 'photo.jpg'
-const bot = new Bot(token); 
+const photoFilename = "photo.jpg";
+const bot = new Bot(token);
 
 bot.command("start", (ctx) => ctx.reply("Welcome! Up and running."));
 bot.command("photo", async (ctx) => {
@@ -27,7 +31,7 @@ const takePhoto = async () => {
   }
 };
 
-
 bot.on("message", (ctx) => ctx.reply("Got another message!"));
 
 bot.start();
+
