@@ -1,5 +1,5 @@
 # Generate random size between 30% and 70% of the original size
-SCALE_FACTOR=$(shuf -i 30-90 -n 1)
+SCALE_FACTOR=$(shuf -i 15-90 -n 1)
 
 # Generate a random angle for rotation (in radians; π rad = 180 degrees)
 # FFmpeg uses radians, so we need to convert degrees to radians if using degree values
@@ -8,7 +8,7 @@ ROTATE_RAD=$(awk -v deg=$ROTATE_ANGLE 'BEGIN{print deg*3.14159/180}')
 
 # Generate random displacement for x and y axis
 DISPLACE_X=$(awk -v min=-200 -v max=200 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')
-DISPLACE_Y=$(awk -v min=-200 -v max=200 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')
+DISPLACE_Y=$(awk -v min=-300 -v max=300 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')
 
 # Get the photo filename from the command line arguments
 PHOTO_FILENAME=$1
