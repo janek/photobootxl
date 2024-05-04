@@ -23,6 +23,7 @@ bot.command("photo", async (ctx) => {
     const photo = InputMediaBuilder.photo(new InputFile(photoFilename));
     photos.push(photo);
     await new Promise((resolve) => setTimeout(resolve, 300)); // 0.5s pause
+    ctx.reply(`Took photo {i}!`);
   }
   ctx.replyWithMediaGroup(photos);
 });
