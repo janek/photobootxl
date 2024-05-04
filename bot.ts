@@ -15,6 +15,7 @@ bot.command("start", (ctx) =>
 );
 
 bot.command("photo", async (ctx) => {
+  ctx.reply(`Smile!`);
   const photos = [];
   for await (const i of Array(4).keys()) {
     const photoFilename = `photo${i}.jpg`;
@@ -23,7 +24,6 @@ bot.command("photo", async (ctx) => {
     const photo = InputMediaBuilder.photo(new InputFile(photoFilename));
     photos.push(photo);
     await new Promise((resolve) => setTimeout(resolve, 300)); // 0.5s pause
-    ctx.reply(`Took photo {i}!`);
   }
   ctx.replyWithMediaGroup(photos);
 });
