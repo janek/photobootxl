@@ -26,6 +26,7 @@ bot.command("photo", async (ctx) => {
     await new Promise((resolve) => setTimeout(resolve, 300)); // 0.5s pause
   }
   ctx.replyWithMediaGroup(photos);
+  await tileAndPrintPhotos();
 });
 
 const overlayTurbulenceOnPhoto = async (photoFilename: string) => {
@@ -35,6 +36,24 @@ const overlayTurbulenceOnPhoto = async (photoFilename: string) => {
   const { code } = await command.output();
   if (code !== 0) {
     throw new Error(`fswebcam exited with code ${code}`);
+  }
+};
+
+const tileAndPrintPhotos = async () => {
+  const tileCommand = new Deno.Command("sh", {
+    args: ["tile.sh"],
+  });
+  const { code: tileCode } = await tileCommand.output();
+  if (tileCode !== 0) {
+    throw new Error(`tile.sh exited with code ${tileCode}`);
+  }
+
+  const printCommand = new Deno.Command("sh", {
+    args: ["print.sh"],
+  });
+  const { code: printCode } = await printCommand.output();
+  if (printCode !== 0) {
+    throw new Error(`print.sh exited with code ${printCode}`);
   }
 };
 

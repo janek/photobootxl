@@ -1,0 +1,1 @@
+ffmpeg -i photo0.jpg -i photo1.jpg -i photo2.jpg -i photo3.jpg -filter_complex "tile=2x2" tiled_photos.jpg
