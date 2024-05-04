@@ -1,1 +1,1 @@
-ffmpeg -i photo0.jpg -i photo1.jpg -i photo2.jpg -i photo3.jpg -lavfi "xstack=inputs=4:layout=0_0|w0_0|0_h0|w0_h0" tiled_photos.jpg
+ffmpeg -y -i photo0.jpg -i photo1.jpg -i photo2.jpg -i photo3.jpg -lavfi "xstack=inputs=4:layout=0_0|w0_0|0_h0|w0_h0" tiled_photos.jpg
