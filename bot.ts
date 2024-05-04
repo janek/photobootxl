@@ -8,23 +8,28 @@ import { load } from "https://deno.land/std@0.221.0/dotenv/mod.ts";
 await load({ export: true });
 
 const token = Deno.env.get("BOT_TOKEN")!;
-const photoFilename = "photo.jpg";
 const bot = new Bot(token);
 
-bot.command("start", (ctx) => ctx.reply("Welcome! Up and running."));
+bot.command("start", (ctx) =>
+  ctx.reply("beep bop! Press or write /photo to take a photo!")
+);
+
 bot.command("photo", async (ctx) => {
-  // Run a terminal command and await end: ffmpeg -f v4l2 -i /dev/video0 -frames 1 ~/Desktop/dx.jpg
-
-  await takePhoto();
-  await overlayTurbulenceOnPhoto();
-
-  const photo = InputMediaBuilder.photo(new InputFile("photo.jpg"));
-  ctx.replyWithMediaGroup([photo]);
+  const photos = [];
+  for await (const i of Array(4).keys()) {
+    const photoFilename = `photo${i}.jpg`;
+    await takePhoto(photoFilename);
+    await overlayTurbulenceOnPhoto(photoFilename);
+    const photo = InputMediaBuilder.photo(new InputFile(photoFilename));
+    photos.push(photo);
+    await new Promise((resolve) => setTimeout(resolve, 300)); // 0.5s pause
+  }
+  ctx.replyWithMediaGroup(photos);
 });
 
-const overlayTurbulenceOnPhoto = async () => {
+const overlayTurbulenceOnPhoto = async (photoFilename: string) => {
   const command = new Deno.Command("sh", {
-    args: ["overlay.sh"],
+    args: ["overlay.sh", photoFilename],
   });
   const { code } = await command.output();
   if (code !== 0) {
@@ -32,7 +37,7 @@ const overlayTurbulenceOnPhoto = async () => {
   }
 };
 
-const takePhoto = async () => {
+const takePhoto = async (photoFilename: string) => {
   const command = new Deno.Command("fswebcam", {
     args: [photoFilename],
   });
