@@ -18,6 +18,7 @@ bot.command("photo", async (ctx) => {
   ctx.reply(`Smile!`);
   const photos = [];
   for await (const i of Array(4).keys()) {
+    ctx.reply(`Taking photo ${i + 1}!`);
     const photoFilename = `photo${i}.jpg`;
     await takePhoto(photoFilename);
     await overlayTurbulenceOnPhoto(photoFilename);
