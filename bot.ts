@@ -18,7 +18,7 @@ bot.command("photo", async (ctx) => {
   ctx.reply(`Smile!`);
   const photos = [];
   for await (const i of Array(4).keys()) {
-    ctx.reply(`Taking photo ${i + 1}!`);
+    ctx.reply(`${i + 1}!`);
     const photoFilename = `photo${i}.jpg`;
     await takePhoto(photoFilename);
     await overlayTurbulenceOnPhoto(photoFilename);
@@ -27,6 +27,7 @@ bot.command("photo", async (ctx) => {
     await new Promise((resolve) => setTimeout(resolve, 300)); // 0.5s pause
   }
   ctx.replyWithMediaGroup(photos);
+  ctx.reply(`Printing!`);
   await tileAndPrintPhotos();
 });
 
