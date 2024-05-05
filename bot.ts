@@ -78,9 +78,13 @@ export const takePhoto = async (photoFilename: string) => {
   const command = new Deno.Command("fswebcam", {
     args: [photoFilename],
   });
-  const { code } = await command.output();
-  if (code !== 0) {
-    throw new Error(`fswebcam exited with code ${code}`);
+  const output = await command.output();
+  if (output.code !== 0) {
+    throw new Error(
+      `fswebcam exited with code ${
+        output.code
+      } and error message: ${new TextDecoder().decode(output.stderr)}`
+    );
   }
 };
 

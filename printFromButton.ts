@@ -14,7 +14,7 @@ sendMessageToAdmin("Button photo triggered!");
 const photos = [];
 for await (const i of Array(4).keys()) {
   sendMessageToAdmin(`${i + 1}!`);
-  const photoFilename = `photo${i}.jpg`;
+  const photoFilename = `button_photo${i}.jpg`;
   await takePhoto(photoFilename);
   await overlayTurbulenceOnPhoto(photoFilename);
   const photo = InputMediaBuilder.photo(new InputFile(photoFilename));

@@ -12,7 +12,7 @@ try:
         if button_state == False:
             print("Button Pressed11")
             os.system("echo hishell")
-            os.system("deno run printFromButton.ts")
+            os.system("deno run --allow-read --allow-env --allow-net --allow-run printFromButton.ts")
         else:
             print("Button Released!")
         time.sleep(0.1)  # Delay for debounce and to reduce CPU usage
