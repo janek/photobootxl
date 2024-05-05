@@ -1,11 +1,11 @@
 export const takePhoto = async (photoFilename: string) => {
-  const command = new Deno.Command("fswebcam", {
-    args: [photoFilename],
+  const command = new Deno.Command("sh", {
+    args: ["take_photo.sh", photoFilename],
   });
   const output = await command.output();
   if (output.code !== 0) {
     throw new Error(
-      `fswebcam exited with code ${
+      `take_photo.sh exited with code ${
         output.code
       } and error message: ${new TextDecoder().decode(output.stderr)}`
     );
@@ -16,9 +16,13 @@ export const overlayTurbulenceOnPhoto = async (photoFilename: string) => {
   const command = new Deno.Command("sh", {
     args: ["overlay.sh", photoFilename],
   });
-  const { code } = await command.output();
-  if (code !== 0) {
-    throw new Error(`fswebcam exited with code ${code}`);
+  const output = await command.output();
+  if (output.code !== 0) {
+    throw new Error(
+      `overlay.sh exited with code ${
+        output.code
+      } and error message: ${new TextDecoder().decode(output.stderr)}`
+    );
   }
 };
 
@@ -26,16 +30,24 @@ export const tileAndPrintPhotos = async () => {
   const tileCommand = new Deno.Command("sh", {
     args: ["tile.sh"],
   });
-  const { code: tileCode } = await tileCommand.output();
-  if (tileCode !== 0) {
-    throw new Error(`tile.sh exited with code ${tileCode}`);
+  const tileOutput = await tileCommand.output();
+  if (tileOutput.code !== 0) {
+    throw new Error(
+      `tile.sh exited with code ${
+        tileOutput.code
+      } and error message: ${new TextDecoder().decode(tileOutput.stderr)}`
+    );
   }
 
   const printCommand = new Deno.Command("sh", {
     args: ["print.sh"],
   });
-  const { code: printCode } = await printCommand.output();
-  if (printCode !== 0) {
-    throw new Error(`print.sh exited with code ${printCode}`);
+  const printOutput = await printCommand.output();
+  if (printOutput.code !== 0) {
+    throw new Error(
+      `print.sh exited with code ${
+        printOutput.code
+      } and error message: ${new TextDecoder().decode(printOutput.stderr)}`
+    );
   }
 };
