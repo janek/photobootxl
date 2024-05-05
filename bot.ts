@@ -9,7 +9,7 @@ import {
   takePhoto,
   overlayTurbulenceOnPhoto,
   tileAndPrintPhotos,
-} from "./photo_utils.ts";
+} from "./photo.ts";
 
 await load({ export: true });
 
