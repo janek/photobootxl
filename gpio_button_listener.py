@@ -10,11 +10,8 @@ try:
     while True:
         button_state = GPIO.input(11)
         if button_state == False:
-            print("Button Pressed11")
-            os.system("echo hishell")
+            print("Taking photo!")
             os.system("deno run --allow-read --allow-env --allow-net --allow-run printFromButton.ts")
-        else:
-            print("Button Released!")
         time.sleep(0.1)  # Delay for debounce and to reduce CPU usage
 
 finally:
