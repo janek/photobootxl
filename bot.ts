@@ -8,6 +8,7 @@ import { load } from "https://deno.land/std@0.221.0/dotenv/mod.ts";
 await load({ export: true });
 
 const token = Deno.env.get("BOT_TOKEN")!;
+export const adminId = Deno.env.get("TELEGRAM_ADMIN_ID")!;
 const bot = new Bot(token);
 
 bot.command("start", (ctx) =>
@@ -31,7 +32,21 @@ bot.command("photo", async (ctx) => {
   await tileAndPrintPhotos();
 });
 
-const overlayTurbulenceOnPhoto = async (photoFilename: string) => {
+export const sendLastPhotosToAdmin = async () => {
+  const photos = [];
+  for await (const i of Array(4).keys()) {
+    const photoFilename = `photo${i}.jpg`;
+    const photo = InputMediaBuilder.photo(new InputFile(photoFilename));
+    photos.push(photo);
+  }
+  bot.api.sendMediaGroup(adminId, photos);
+};
+
+export const sendMessageToAdmin = async (message: string) => {
+  bot.api.sendMessage(adminId, message);
+};
+
+export const overlayTurbulenceOnPhoto = async (photoFilename: string) => {
   const command = new Deno.Command("sh", {
     args: ["overlay.sh", photoFilename],
   });
@@ -41,7 +56,7 @@ const overlayTurbulenceOnPhoto = async (photoFilename: string) => {
   }
 };
 
-const tileAndPrintPhotos = async () => {
+export const tileAndPrintPhotos = async () => {
   const tileCommand = new Deno.Command("sh", {
     args: ["tile.sh"],
   });
@@ -59,7 +74,7 @@ const tileAndPrintPhotos = async () => {
   }
 };
 
-const takePhoto = async (photoFilename: string) => {
+export const takePhoto = async (photoFilename: string) => {
   const command = new Deno.Command("fswebcam", {
     args: [photoFilename],
   });
