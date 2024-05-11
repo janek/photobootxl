@@ -4,18 +4,15 @@ import {
   InputFile,
   InputMediaBuilder,
 } from "https://deno.land/x/grammy@v1.22.4/mod.ts";
-import { load } from "https://deno.land/std@0.221.0/dotenv/mod.ts";
+
 import {
   takePhoto,
   overlayTurbulenceOnPhoto,
   tileAndPrintPhotos,
 } from "./photo.ts";
+import { botToken } from "./utils.ts";
 
-await load({ export: true });
-
-const token = Deno.env.get("BOT_TOKEN")!;
-export const adminId = Deno.env.get("TELEGRAM_ADMIN_ID")!;
-const bot = new Bot(token);
+const bot = new Bot(botToken);
 
 bot.command("start", (ctx) =>
   ctx.reply("beep bop! Press or write /photo to take a photo!")
@@ -37,20 +34,6 @@ bot.command("photo", async (ctx) => {
   ctx.reply(`Printing!`);
   await tileAndPrintPhotos();
 });
-
-export const sendLastPhotosToAdmin = async () => {
-  const photos = [];
-  for await (const i of Array(4).keys()) {
-    const photoFilename = `photo${i}.jpg`;
-    const photo = InputMediaBuilder.photo(new InputFile(photoFilename));
-    photos.push(photo);
-  }
-  bot.api.sendMediaGroup(adminId, photos);
-};
-
-export const sendMessageToAdmin = async (message: string) => {
-  bot.api.sendMessage(adminId, message);
-};
 
 bot.on("message", (ctx) => ctx.reply("Got another message!"));
 

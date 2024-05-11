@@ -3,18 +3,17 @@ import {
   takePhoto,
   tileAndPrintPhotos,
 } from "./photo.ts";
+import { sendLastPhotosToAdmin, sendMessageToAdmin } from "./utils.ts";
 
-// sendMessageToAdmin("Button photo triggered!");
-// const photos = [];
+sendMessageToAdmin("Button photo triggered!");
 for await (const i of Array(4).keys()) {
-  //   sendMessageToAdmin(`${i + 1}!`);
+  sendMessageToAdmin(`${i + 1}!`);
   console.log(`Taking photo from button - ${i + 1}!`);
   const photoFilename = `photo${i}.jpg`;
   await takePhoto(photoFilename);
   await overlayTurbulenceOnPhoto(photoFilename);
-  //   const photo = InputMediaBuilder.photo(new InputFile(photoFilename));
-  //   photos.push(photo);
 }
 
-// sendLastPhotosToAdmin();
-await tileAndPrintPhotos();
+await new Promise((resolve) => setTimeout(resolve, 300));
+await sendLastPhotosToAdmin();
+// await tileAndPrintPhotos();
