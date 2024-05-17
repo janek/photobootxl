@@ -1,3 +1,8 @@
+if [ "${DISABLE_OVERLAY}" = "true" ]; then
+    echo "Overlay disabled, exiting early."
+    exit 0
+fi
+
 # Generate random size between 30% and 70% of the original size
 SCALE_FACTOR=$(shuf -i 15-90 -n 1)
 
