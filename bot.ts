@@ -18,6 +18,17 @@ bot.command("start", (ctx) =>
   ctx.reply("beep bop! Press or write /photo to take a photo!")
 );
 
+bot.command("toggleprint", (ctx) => {
+  const currentStatus = Deno.env.get("DISABLE_PRINT") === "true";
+  Deno.env.set("DISABLE_PRINT", currentStatus ? "false" : "true");
+  ctx.reply(`Printing is now ${currentStatus ? "enabled" : "disabled"}.`);
+});
+
+bot.command("togglelogo", (ctx) => {
+  const currentStatus = Deno.env.get("DISABLE_OVERLAY") === "true";
+  Deno.env.set("DISABLE_OVERLAY", currentStatus ? "false" : "true");
+  ctx.reply(`Logo overlay is now ${currentStatus ? "enabled" : "disabled"}.`);
+});
 bot.command("photo", async (ctx) => {
   ctx.reply(`Smile!`);
   const photos = [];
@@ -31,12 +42,33 @@ bot.command("photo", async (ctx) => {
     await new Promise((resolve) => setTimeout(resolve, 300)); // 0.5s pause
   }
   ctx.replyWithMediaGroup(photos);
-  ctx.reply(`Printing!`);
+  if (Deno.env.get("DISABLE_PRINT") != "true") {
+    ctx.reply("Printing!");
+  }
   await tileAndPrintPhotos();
 });
 
-bot.on("message", (ctx) => ctx.reply("Got another message!"));
+bot.on("message", (ctx) => ctx.reply("beep bop"));
 
 bot.start();
 
+bot.command("toggleprint", (ctx) => {
+  const currentStatus = Deno.env.get("DISABLE_PRINT") === "true";
+  Deno.env.set("DISABLE_PRINT", currentStatus ? "false" : "true");
+  ctx.reply(`Printing is now ${currentStatus ? "enabled" : "disabled"}.`);
+});
+
+bot.command("togglelogo", (ctx) => {
+  const currentStatus = Deno.env.get("DISABLE_OVERLAY") === "true";
+  Deno.env.set("DISABLE_OVERLAY", currentStatus ? "false" : "true");
+  ctx.reply(`Logo overlay is now ${currentStatus ? "enabled" : "disabled"}.`);
+});
+
+const printOptionsState = `Printing is ${
+  Deno.env.get("DISABLE_PRINT") === "true" ? "disabled" : "enabled"
+}. and overlay is ${
+  Deno.env.get("DISABLE_OVERLAY") === "true" ? "disabled" : "enabled"
+}.`;
+
 bot.api.sendMessage(Deno.env.get("TELEGRAM_ADMIN_ID")!, "Bo(o)t(h) started!");
+bot.api.sendMessage(Deno.env.get("TELEGRAM_ADMIN_ID")!, printOptionsState);
