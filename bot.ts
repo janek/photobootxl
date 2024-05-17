@@ -10,12 +10,11 @@ import {
   overlayTurbulenceOnPhoto,
   tileAndPrintPhotos,
 } from "./photo.ts";
+
 import { botToken } from "./utils.ts";
+import { disableOverlay, disablePrint } from "./state.ts";
 
 const bot = new Bot(botToken);
-
-export let disablePrint = false;
-export let disableOverlay = false;
 
 bot.command("start", (ctx) =>
   ctx.reply("beep bop! Press or write /photo to take a photo!")

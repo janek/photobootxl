@@ -1,4 +1,4 @@
-import { disableOverlay, disablePrint } from "./bot.ts";
+import { disableOverlay, disablePrint } from "./state.ts";
 import {
   overlayTurbulenceOnPhoto,
   takePhoto,
