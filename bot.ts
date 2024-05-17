@@ -60,5 +60,7 @@ const printOptionsState = `Printing ${
   disablePrint ? "disabled" : "enabled"
 }, logo ${disableOverlay ? "disabled" : "enabled"}.`;
 
-bot.api.sendMessage(Deno.env.get("TELEGRAM_ADMIN_ID")!, "Bo(o)t(h) started!");
-bot.api.sendMessage(Deno.env.get("TELEGRAM_ADMIN_ID")!, printOptionsState);
+bot.api.sendMessage(
+  Deno.env.get("TELEGRAM_ADMIN_ID")!,
+  "Bo(o)t(h) started!\n" + printOptionsState
+);
