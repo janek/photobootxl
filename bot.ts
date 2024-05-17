@@ -64,9 +64,9 @@ bot.command("togglelogo", (ctx) => {
   ctx.reply(`Logo overlay is now ${currentStatus ? "enabled" : "disabled"}.`);
 });
 
-const printOptionsState = `Printing is ${
+const printOptionsState = `Printing ${
   Deno.env.get("DISABLE_PRINT") === "true" ? "disabled" : "enabled"
-}. and overlay is ${
+}, overlay ${
   Deno.env.get("DISABLE_OVERLAY") === "true" ? "disabled" : "enabled"
 }.`;
 
