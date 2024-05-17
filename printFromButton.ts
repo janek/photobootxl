@@ -8,6 +8,7 @@ import {
 import { sendLastPhotosToAdmin, sendMessageToAdmin } from "./utils.ts";
 
 sendMessageToAdmin("Button photo triggered!");
+sendMessageToAdmin(`state: ${JSON.stringify(state)}`);
 for await (const i of Array(4).keys()) {
   sendMessageToAdmin(`${i + 1}!`);
   console.log(`Taking photo from button - ${i + 1}!`);
