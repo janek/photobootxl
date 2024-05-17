@@ -1,3 +1,4 @@
+import { disableOverlay, disablePrint } from "./bot.ts";
 import {
   overlayTurbulenceOnPhoto,
   takePhoto,
@@ -11,9 +12,16 @@ for await (const i of Array(4).keys()) {
   console.log(`Taking photo from button - ${i + 1}!`);
   const photoFilename = `photo${i}.jpg`;
   await takePhoto(photoFilename);
-  await overlayTurbulenceOnPhoto(photoFilename);
+  if (!disableOverlay) {
+    await overlayTurbulenceOnPhoto(photoFilename);
+  }
 }
 
 await new Promise((resolve) => setTimeout(resolve, 300));
 await sendLastPhotosToAdmin();
-// await tileAndPrintPhotos();
+if (!disablePrint) {
+  sendMessageToAdmin("Printing!");
+  await tileAndPrintPhotos();
+} else {
+  sendMessageToAdmin("Printing disabled");
+}
