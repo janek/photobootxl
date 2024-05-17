@@ -14,21 +14,23 @@ import { botToken } from "./utils.ts";
 
 const bot = new Bot(botToken);
 
+export let disablePrint = false;
+export let disableOverlay = false;
+
 bot.command("start", (ctx) =>
   ctx.reply("beep bop! Press or write /photo to take a photo!")
 );
 
 bot.command("toggleprint", (ctx) => {
-  const currentStatus = Deno.env.get("DISABLE_PRINT") === "true";
-  Deno.env.set("DISABLE_PRINT", currentStatus ? "false" : "true");
-  ctx.reply(`Printing is now ${currentStatus ? "enabled" : "disabled"}.`);
+  disablePrint = !disablePrint;
+  ctx.reply(`Printing is now ${disablePrint ? "disabled" : "enabled"}.`);
 });
 
 bot.command("togglelogo", (ctx) => {
-  const currentStatus = Deno.env.get("DISABLE_OVERLAY") === "true";
-  Deno.env.set("DISABLE_OVERLAY", currentStatus ? "false" : "true");
-  ctx.reply(`Logo overlay is now ${currentStatus ? "enabled" : "disabled"}.`);
+  disableOverlay = !disableOverlay;
+  ctx.reply(`Logo overlay is now ${disableOverlay ? "disabled" : "enabled"}.`);
 });
+
 bot.command("photo", async (ctx) => {
   ctx.reply(`Smile!`);
   const photos = [];
@@ -36,14 +38,17 @@ bot.command("photo", async (ctx) => {
     ctx.reply(`${i + 1}!`);
     const photoFilename = `photo${i}.jpg`;
     await takePhoto(photoFilename);
-    await overlayTurbulenceOnPhoto(photoFilename);
+    if (!disableOverlay) {
+      await overlayTurbulenceOnPhoto(photoFilename);
+    }
     const photo = InputMediaBuilder.photo(new InputFile(photoFilename));
     photos.push(photo);
     await new Promise((resolve) => setTimeout(resolve, 300)); // 0.5s pause
   }
   ctx.replyWithMediaGroup(photos);
-  if (Deno.env.get("DISABLE_PRINT") != "true") {
+  if (!disablePrint) {
     ctx.reply("Printing!");
+    await tileAndPrintPhotos();
   }
   await tileAndPrintPhotos();
 });
@@ -65,10 +70,8 @@ bot.command("togglelogo", (ctx) => {
 });
 
 const printOptionsState = `Printing ${
-  Deno.env.get("DISABLE_PRINT") === "true" ? "disabled" : "enabled"
-}, overlay ${
-  Deno.env.get("DISABLE_OVERLAY") === "true" ? "disabled" : "enabled"
-}.`;
+  disablePrint ? "disabled" : "enabled"
+}, overlay ${disableOverlay ? "disabled" : "enabled"}.`;
 
 bot.api.sendMessage(Deno.env.get("TELEGRAM_ADMIN_ID")!, "Bo(o)t(h) started!");
 bot.api.sendMessage(Deno.env.get("TELEGRAM_ADMIN_ID")!, printOptionsState);
