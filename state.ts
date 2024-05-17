@@ -1,2 +1,4 @@
-export let disablePrint = false;
-export let disableOverlay = false;
+export const state = {
+  disablePrint: false,
+  disableOverlay: false,
+};

@@ -12,8 +12,7 @@ import {
 } from "./photo.ts";
 
 import { botToken } from "./utils.ts";
-import { disableOverlay, disablePrint } from "./state.ts";
-
+import { state } from "./state.ts";
 const bot = new Bot(botToken);
 
 bot.command("start", (ctx) =>
@@ -21,13 +20,15 @@ bot.command("start", (ctx) =>
 );
 
 bot.command("toggleprint", (ctx) => {
-  disablePrint = !disablePrint;
-  ctx.reply(`Printing is now ${disablePrint ? "disabled" : "enabled"}.`);
+  state.disablePrint = !state.disablePrint;
+  ctx.reply(`Printing is now ${state.disablePrint ? "disabled" : "enabled"}.`);
 });
 
 bot.command("togglelogo", (ctx) => {
-  disableOverlay = !disableOverlay;
-  ctx.reply(`Logo overlay is now ${disableOverlay ? "disabled" : "enabled"}.`);
+  state.disableOverlay = !state.disableOverlay;
+  ctx.reply(
+    `Logo overlay is now ${state.disableOverlay ? "disabled" : "enabled"}.`
+  );
 });
 
 bot.command("photo", async (ctx) => {
@@ -37,7 +38,7 @@ bot.command("photo", async (ctx) => {
     ctx.reply(`${i + 1}!`);
     const photoFilename = `photo${i}.jpg`;
     await takePhoto(photoFilename);
-    if (!disableOverlay) {
+    if (!state.disableOverlay) {
       await overlayTurbulenceOnPhoto(photoFilename);
     }
     const photo = InputMediaBuilder.photo(new InputFile(photoFilename));
@@ -45,7 +46,7 @@ bot.command("photo", async (ctx) => {
     await new Promise((resolve) => setTimeout(resolve, 300)); // 0.5s pause
   }
   ctx.replyWithMediaGroup(photos);
-  if (!disablePrint) {
+  if (!state.disablePrint) {
     ctx.reply("Printing!");
     await tileAndPrintPhotos();
   }
@@ -56,8 +57,8 @@ bot.on("message", (ctx) => ctx.reply("beep bop"));
 bot.start();
 
 const printOptionsState = `Printing ${
-  disablePrint ? "disabled" : "enabled"
-}, logo ${disableOverlay ? "disabled" : "enabled"}.`;
+  state.disablePrint ? "disabled" : "enabled"
+}, logo ${state.disableOverlay ? "disabled" : "enabled"}.`;
 
 bot.api.sendMessage(
   Deno.env.get("TELEGRAM_ADMIN_ID")!,
