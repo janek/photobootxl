@@ -4,11 +4,12 @@ if [ -f "$photoFilename" ]; then
   rm "$photoFilename"
 fi
 
-# Check if the script is running on a Mac
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    # Use imagesnap for Mac
+    # MacOS
+    say "$phtoFilename"
     imagesnap "$photoFilename"
 else
-    # Use fswebcam for other systems
+    # Raspberry Pi / Linux
+    espeak "$photoFilename"
     fswebcam --no-banner "$photoFilename"
 fi
