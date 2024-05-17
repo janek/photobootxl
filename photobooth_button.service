@@ -1,0 +1,12 @@
+[Unit]
+Description= Photobooth Button Listener
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/pi/Developer/photobootxl/gpio_button_listener.py
+WorkingDirectory=/home/pi/Developer/photobootxl
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
